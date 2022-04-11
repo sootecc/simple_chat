@@ -1,5 +1,6 @@
 package application;
 	
+
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -9,6 +10,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 
@@ -88,6 +96,53 @@ public class Main extends Application {
 	//UI를 생성하고 실질적으로 프로그램을 작동시키는 메소드입니다.		 exception을 던지는게 맞나?
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		BorderPane root = new BorderPane();
+		root.setPadding(new Insets(5));		//패딩 5
+		
+		TextArea textArea = new TextArea();	//채팅 텍스트 부분
+		textArea.setEditable(false);		//입력 불가, 색상 바꾸기 
+		textArea.setFont(new Font("나눔고딕",15));
+		root.setCenter(textArea);
+		
+		
+		Button toggleButton = new Button("시작하기");
+		toggleButton.setMaxWidth(Double.MAX_VALUE);
+		BorderPane.setMargin(toggleButton,new Insets(1, 0, 0, 0));
+		root.setBottom(toggleButton);
+		
+		
+		String IP = "127.0.0.1";
+		int port = 9876;
+		
+		
+		toggleButton.setOnAction(event -> {
+			if(toggleButton.getText().equals("시작하기")) {	//시작 조건
+				startServer(IP, port);
+				Platform.runLater(()->{
+					String message = String.format("서버 시작\n",IP ,port);
+					textArea.appendText(message);
+					toggleButton.setText("종료하기");
+				});
+			}
+			else {
+				stopServer();
+				Platform.runLater(()->{
+					String message = String.format("서버 종료\n",IP ,port);
+					textArea.appendText(message);
+					toggleButton.setText("시작하기");		//버튼 토글
+				});
+			}
+		});
+		
+		
+		Scene scene = new Scene(root, 400, 400);
+		primaryStage.setTitle("[채팅 서버]");
+		primaryStage.setOnCloseRequest(event -> stopServer());
+		primaryStage.setScene(scene);
+		primaryStage.show();
+		
+		
+		
 		
 	}
 	
