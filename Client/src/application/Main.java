@@ -24,15 +24,15 @@ public class Main extends Application {
 	//클라이언트에서는 쓰레드 풀이 필요없다.
 	
 	Socket socket;
-	TextArea textArea;
+	TextArea textArea;		//다중 행 입력받는 javafx
 	
 	//클라이언트 프로그램의 작동을 시작하는 메소드
 	public void startClient(String IP, int port) {
 		Thread thread = new Thread() {
 			public void run() {
 				try {
-					socket = new Socket(IP, port);
-					receive();
+					socket = new Socket(IP, port);	//소켓 초기화
+					receive();						//서버에서 메시지 받기
 				}
 				catch(Exception e) {
 					if(!socket.isClosed()) {
@@ -122,6 +122,7 @@ public class Main extends Application {
 		
 		hbox.getChildren().addAll(userName, IPText, portText);
 		root.setTop(hbox);
+		//only UI
 		
 		textArea = new TextArea();
 		textArea.setEditable(false);
