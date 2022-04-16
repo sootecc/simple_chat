@@ -64,7 +64,7 @@ public class Main extends Application {
 		while(true) {
 			
 			try {
-				InputStream in = socket.getInputStream();
+				InputStream in = socket.getInputStream();		
 				byte[] buffer = new byte[512];
 				int length = in.read(buffer);
 				if(length == -1) throw new IOException();
@@ -103,9 +103,9 @@ public class Main extends Application {
 	
 	//실제로 프로그램을 작동시키는 메소드
 	@Override
-	public void start(Stage primaryStage){
+	public void start(Stage primaryStage){		//Stage 에 Scene이 포함, Scene에 Pane이 포함, Pane에 구성 요소가 포함
 		
-		BorderPane root = new BorderPane();
+		BorderPane root = new BorderPane();		 
 		root.setPadding(new Insets(5));
 		
 		HBox hbox = new HBox();
@@ -116,8 +116,8 @@ public class Main extends Application {
 		userName.setPromptText("닉네임을 입력하세요.");
 		HBox.setHgrow(userName, Priority.ALWAYS);
 		
-		TextField IPText = new TextField("127.0.0.1");
-		TextField portText = new TextField("9876");
+		TextField IPText = new TextField("127.0.0.1");		//TextField는 입력 필드
+		TextField portText = new TextField("9876");			
 		portText.setPrefWidth(80);
 		
 		hbox.getChildren().addAll(userName, IPText, portText);
@@ -128,17 +128,17 @@ public class Main extends Application {
 		textArea.setEditable(false);
 		root.setCenter(textArea);
 		
-		
+		//텍스트 필드에 내용을 쓰고 Action 하면 send()  
 		TextField input = new TextField();
 		input.setPrefWidth(Double.MAX_VALUE);
-		input.setDisable(true);
-		input.setOnAction(event -> {
+		input.setDisable(true);		
+		input.setOnAction(event -> {			
 			send(userName.getText() + ": "+input.getText()+"\n" );
 			input.setText("");
 			input.requestFocus();
 		});
 		
-		
+		//보내기 버튼을 눌렀을 때 send()
 		Button sendButton = new Button("보내기");
 		sendButton.setDisable(true);
 		
@@ -148,6 +148,7 @@ public class Main extends Application {
 			input.requestFocus();
 		});
 		
+		//접속하기 버튼을 눌렀을 때 
 		Button connectionButton = new Button("접속하기");
 		connectionButton.setOnAction(event -> {
 			if(connectionButton.getText().equals("접속하기")) {
@@ -160,7 +161,7 @@ public class Main extends Application {
 				}
 				
 				startClient(IPText.getText(),port);
-				Platform.runLater(()->{
+				Platform.runLater(()->{		//runLater?
 					textArea.appendText("[채팅방 접속]\n");
 				});
 				
